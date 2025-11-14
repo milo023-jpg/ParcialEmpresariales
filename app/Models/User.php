@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,8 +13,6 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens;
-
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
@@ -23,9 +20,7 @@ class User extends Authenticatable
     use HasRoles;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * Atributos que se pueden asignar en masa.
      */
     protected $fillable = [
         'name',
@@ -34,9 +29,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
+     * Atributos que se ocultan en arrays o JSON.
      */
     protected $hidden = [
         'password',
@@ -46,25 +39,19 @@ class User extends Authenticatable
     ];
 
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
+     * Atributos adicionales que se agregan al modelo.
      */
     protected $appends = [
         'profile_photo_url',
     ];
 
     /**
-     * Guard name for spatie/laravel-permission.
-     *
-     * @var string
+     * Guard name para Spatie Permissions.
      */
     protected $guard_name = 'web';
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Casting de atributos.
      */
     protected function casts(): array
     {
@@ -72,5 +59,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /* ============================================================
+     | 🔹 RELACIONES DEL MÓDULO MIC (Inventario Crítico)
+     |============================================================ */
+
+    /**
+     * Un usuario puede registrar muchos productos.
+     * Relación: 1 usuario → N productos
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Un usuario tiene muchas alertas a través de sus productos.
+     * Relación: 1 usuario → N productos → N alertas
+     */
+    public function alerts()
+    {
+        return $this->hasManyThrough(Alert::class, Product::class);
     }
 }

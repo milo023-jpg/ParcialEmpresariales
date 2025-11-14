@@ -9,15 +9,27 @@ use Illuminate\Support\Facades\Auth;
 class EnsureHasAdminPermission
 {
     /**
-     * Handle an incoming request.
+     * Verifica que el usuario autenticado tenga el rol o permiso de administrador.
      */
     public function handle(Request $request, Closure $next)
     {
         $user = Auth::user();
 
-        if (! $user || ! method_exists($user, 'hasPermissionTo') || ! $user->hasPermissionTo('acceso-admin-dashboard')) {
-            // Redirigir al home con mensaje
-            return redirect('/')->with('error', 'Acceso denegado');
+        // Si no está autenticado
+        if (! $user) {
+            return redirect()->route('login')->with('error', 'Debes iniciar sesión para continuar.');
+        }
+
+        // Si no tiene el rol "admin" ni el permiso "acceso-admin-dashboard"
+        if (
+            ! method_exists($user, 'hasRole') ||
+            (
+                ! $user->hasRole('admin') &&
+                ! $user->hasPermissionTo('acceso-admin-dashboard')
+            )
+        ) {
+            return redirect('/')
+                ->with('error', 'Acceso denegado: no tienes permisos de administrador.');
         }
 
         return $next($request);
