@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\Product;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ProductPolicy
@@ -12,7 +11,7 @@ class ProductPolicy
     use HandlesAuthorization;
 
     /**
-     * Permite a los administradores y supervisores anular las políticas.
+     * Si el usuario es administrador, tiene permiso absoluto sobre todo.
      */
     public function before(User $user, string $ability): ?bool
     {
@@ -22,58 +21,77 @@ class ProductPolicy
         return null;
     }
 
+    /**
+     * Todos los usuarios autenticados pueden ver el inventario.
+     */
     public function viewAny(User $user): bool
     {
-        // El Operario y el Supervisor pueden ver el inventario.
-        //return $user->hasRole('operario') || $user->hasRole('supervisor');
         return true;
     }
 
     /**
-     * Determinar si el usuario puede crear nuevos ingredientes/productos.
-     * Solo los supervisores pueden añadir nuevos productos.
+     * Todos pueden ver un producto individual.
+     */
+    public function view(User $user, Product $product): bool
+    {
+        return true;
+    }
+
+    /**
+     * Crear productos:
+     * ❌ Solo admin (por "before").
      */
     public function create(User $user): bool
     {
-        // 🔹 Supervisor: Puede crear productos.
-        return $user->hasRole('supervisor');
+        return false;
     }
 
     /**
-     * Determinar si el usuario puede registrar salidas de inventario (registerOutput).
-     * Esto lo hacen los operarios y supervisores al usar ingredientes.
+     * Registrar salidas:
+     * ✔ usuario puede
+     * ✔ admin puede (por before)
      */
     public function registerOutput(User $user, Product $product): bool
     {
-        // 🔹 Operario o Supervisor: Puede registrar el uso de productos.
-        return $user->hasRole('operario') || $user->hasRole('supervisor') || $user->hasRole('admin');
+        return $user->hasRole('usuario');
     }
 
     /**
-     * Determinar si el usuario puede modificar el stock mínimo de alerta (updateStockMinimo).
-     * Solo el supervisor tiene la potestad de ajustar los umbrales de alerta.
+     * Registrar entradas (si la vas a implementar)
+     * ✔ usuario puede
      */
-    public function updateStockMinimo(User $user, Product $product): bool
+    public function registerInput(User $user, Product $product): bool
     {
-        // 🔹 Supervisor: Únicamente puede establecer el stock mínimo.
-        return $user->hasRole('supervisor');
+        return $user->hasRole('usuario');
     }
-    
+
     /**
-     * Determinar si el usuario puede editar la información completa del producto.
+     * EDITAR producto:
+     * ✔ usuario puede acceder a la pantalla de edición
+     * ❌ admin ya tiene permiso total por before()
      */
     public function update(User $user, Product $product): bool
     {
-        // 🔹 Supervisor: Puede modificar todos los campos.
-        return $user->hasRole('supervisor');
+        return $user->hasRole('usuario');
     }
 
     /**
-     * Determinar si el usuario puede eliminar un producto.
+     * Eliminar producto:
+     * ❌ usuario NO puede
+     * ✔ admin puede (por before)
      */
     public function delete(User $user, Product $product): bool
     {
-        // 🔹 Supervisor: Puede eliminar productos.
-        return $user->hasRole('supervisor');
+        return false;
+    }
+
+    /**
+     * Ajustar stock mínimo:
+     * ❌ usuario NO puede
+     * ✔ admin puede (por before)
+     */
+    public function updateStockMinimo(User $user, Product $product): bool
+    {
+        return false;
     }
 }

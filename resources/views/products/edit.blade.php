@@ -14,19 +14,24 @@
                 <form method="POST" action="{{ route('products.update', $product) }}">
                     @csrf
                     @method('PUT')
-                    
+                    @php
+                        // Si es rol usuario → solo puede editar stock_actual
+                        $soloLectura = auth()->user()->hasRole('usuario');
+                    @endphp
                     {{-- Campo Nombre --}}
                     <div class="mb-4">
                         <x-label for="nombre" value="{{ __('Nombre') }}" />
                         <x-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" 
-                            value="{{ old('nombre', $product->nombre) }}" required />
+                            value="{{ old('nombre', $product->nombre) }}" 
+                            @if($soloLectura) readonly @endif />
                     </div>
 
                     {{-- Campo Referencia --}}
                     <div class="mb-4">
                         <x-label for="referencia" value="{{ __('Referencia') }}" />
                         <x-input id="referencia" class="block mt-1 w-full" type="text" name="referencia" 
-                            value="{{ old('referencia', $product->referencia) }}" required />
+                            value="{{ old('referencia', $product->referencia) }}" 
+                            @if($soloLectura) readonly @endif />
                     </div>
 
                     {{-- Campo Stock Actual --}}
@@ -40,7 +45,8 @@
                     <div class="mb-4">
                         <x-label for="stock_minimo" value="{{ __('Stock Mínimo de Alerta') }}" />
                         <x-input id="stock_minimo" class="block mt-1 w-full" type="number" name="stock_minimo" min="0" 
-                            value="{{ old('stock_minimo', $product->stock_minimo) }}" required />
+                            value="{{ old('stock_minimo', $product->stock_minimo) }}" 
+                            @if($soloLectura) readonly @endif />
                     </div>
 
                     {{-- Campo Fecha de Caducidad --}}
@@ -48,7 +54,8 @@
                         <x-label for="fecha_caducidad" value="{{ __('Fecha de Caducidad (Opcional)') }}" />
                         {{-- Es crucial usar el formato 'Y-m-d' para el campo date y el operador optional() es más limpio --}}
                         <x-input id="fecha_caducidad" class="block mt-1 w-full" type="date" name="fecha_caducidad" 
-                            value="{{ old('fecha_caducidad', optional($product->fecha_caducidad)->format('Y-m-d')) }}" />
+                            value="{{ old('fecha_caducidad', optional($product->fecha_caducidad)->format('Y-m-d')) }}" 
+                            @if($soloLectura) readonly @endif />
                     </div>
                     
                     <div class="flex justify-end mt-4">
