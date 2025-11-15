@@ -29,13 +29,13 @@
             @endcan
 
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <div class="p-6">
-                    <table class="min-w-full divide-y divide-gray-200">
+                <div class="p-6 overflow-x-auto">
+                    <table class="w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
                                 <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre / Ref.</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock Actual</th>
-                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mínimo Alerta</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Stock Actual</th>
+                                <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Mínimo Alerta</th>
                                 <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Caducidad</th>
                                 <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                             </tr>
@@ -49,7 +49,7 @@
                             @endphp
 
                             <tr class="{{ $rowClass }}">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                <td class="px-6 py-4 text-sm font-medium text-gray-900">
                                     {{ $p->nombre }}
                                     <div class="text-xs text-gray-500">({{ $p->referencia }})</div>
                                 </td>
@@ -62,7 +62,7 @@
                                     {{ $p->stock_actual }}
                                 </td>
 
-                                {{-- Stock Mínimo (solo mostrar) --}}
+                                {{-- Stock Mínimo --}}
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $p->stock_minimo }}
                                 </td>
@@ -73,38 +73,39 @@
                                 </td>
 
                                 {{-- Acciones --}}
-                                <td class="px-6 py-4 text-sm font-medium">
-                                    <div class="flex flex-wrap space-x-2">
-
+                                <td class="px-6 py-4 text-sm font-medium whitespace-nowrap"> 
+                                    <div class="flex items-center gap-2">
+                                    
                                         {{-- Salida Inventario --}}
                                         @can('registerOutput', $p)
-                                        <form method="POST" action="{{ route('products.output', $p) }}" class="flex items-center space-x-2">
-                                        @csrf
-                                        <input type="number" name="quantity" min="1" max="{{ $p->stock_actual }}" placeholder="Unidades" required
-                                        class="form-input block w-20 rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200 text-sm">
-                                        <button type="submit" class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-500 hover:bg-indigo-600">
-                                        Salida
-                                        </button>
+                                        <form method="POST" action="{{ route('products.output', $p) }}" class="flex items-center gap-2">
+                                            @csrf
+                                            <input type="number" name="quantity" min="1" max="{{ $p->stock_actual }}" placeholder="Unidades" required
+                                                   class="w-20 px-2 py-1 text-sm border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                                            <button type="submit" class="px-3 py-1 text-xs font-medium text-white bg-indigo-500 rounded-md hover:bg-indigo-600">
+                                                Salida
+                                            </button>
                                         </form>
                                         @endcan
-
+                                    
                                         {{-- Editar --}}
                                         @can('update', $p)
-                                        <a href="{{ route('products.edit', $p) }}" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-700 bg-gray-200 hover:bg-gray-300">
+                                        <a href="{{ route('products.edit', $p) }}" 
+                                           class="px-3 py-1 text-xs font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">
                                             Editar
                                         </a>
                                         @endcan
-
+                                    
                                         {{-- Eliminar --}}
                                         @can('delete', $p)
                                         <form method="POST" action="{{ route('products.destroy', $p) }}" onsubmit="return confirm('¿Seguro de eliminar?');">
                                             @csrf @method('DELETE')
-                                            <button type="submit" class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                                            <button type="submit" class="px-3 py-1 text-xs font-medium text-white bg-red-600 rounded-md hover:bg-red-700">
                                                 Eliminar
                                             </button>
                                         </form>
                                         @endcan
-
+                                    
                                     </div>
                                 </td>
                             </tr>
