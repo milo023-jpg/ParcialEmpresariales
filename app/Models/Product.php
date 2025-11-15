@@ -12,7 +12,17 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nombre', 'referencia', 'stock_actual', 'stock_minimo', 'fecha_caducidad', 'user_id'
+        'nombre',
+        'referencia',
+        'stock_actual',
+        'stock_minimo',
+        'fecha_caducidad',
+        'user_id'
+    ];
+
+    // 🔹 Esto convierte automáticamente la fecha en objeto Carbon
+    protected $casts = [
+        'fecha_caducidad' => 'datetime',
     ];
 
     public function user() {
