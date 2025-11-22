@@ -3,8 +3,9 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-mark class="block h-9 w-auto" />
+                    <a href="{{ route('dashboard') }}" class="flex items-center">
+                    <span class="text-3xl">🍕</span>
+                    <span class="ml-2 text-xl font-bold text-gray-800">La Nonna</span>
                     </a>
                 </div>
 
