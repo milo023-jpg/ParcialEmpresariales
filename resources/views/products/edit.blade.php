@@ -21,17 +21,26 @@
                     {{-- Campo Nombre --}}
                     <div class="mb-4">
                         <x-label for="nombre" value="{{ __('Nombre') }}" />
-                        <x-input id="nombre" class="block mt-1 w-full" type="text" name="nombre" 
-                            value="{{ old('nombre', $product->nombre) }}" 
-                            @if($soloLectura) readonly @endif />
+                        <x-input id="nombre" 
+                            class="block mt-1 w-full @if($soloLectura) bg-gray-100 text-gray-700 cursor-not-allowed @endif" 
+                            type="text" 
+                            name="nombre"
+                            value="{{ old('nombre', $product->nombre) }}"
+                            :readonly="$soloLectura" 
+ />
                     </div>
 
                     {{-- Campo Referencia --}}
                     <div class="mb-4">
                         <x-label for="referencia" value="{{ __('Referencia') }}" />
-                        <x-input id="referencia" class="block mt-1 w-full" type="text" name="referencia" 
-                            value="{{ old('referencia', $product->referencia) }}" 
-                            @if($soloLectura) readonly @endif />
+                        <x-input id="referencia" 
+                            class="block mt-1 w-full @if($soloLectura) bg-gray-100 text-gray-700 cursor-not-allowed @endif" 
+                            type="text" 
+                            name="referencia"
+                            value="{{ old('referencia', $product->referencia) }}"
+                            :readonly="$soloLectura" 
+ />
+
                     </div>
 
                     {{-- Campo Stock Actual --}}
@@ -44,18 +53,28 @@
                     {{-- Campo Stock Mínimo de Alerta --}}
                     <div class="mb-4">
                         <x-label for="stock_minimo" value="{{ __('Stock Mínimo de Alerta') }}" />
-                        <x-input id="stock_minimo" class="block mt-1 w-full" type="number" name="stock_minimo" min="0" 
-                            value="{{ old('stock_minimo', $product->stock_minimo) }}" 
-                            @if($soloLectura) readonly @endif />
+                        <x-input id="stock_minimo" 
+                            class="block mt-1 w-full @if($soloLectura) bg-gray-100 text-gray-700 cursor-not-allowed @endif" 
+                            type="number" 
+                            name="stock_minimo"
+                            value="{{ old('stock_minimo', $product->stock_minimo) }}"
+                            :readonly="$soloLectura" 
+ />
+
                     </div>
 
                     {{-- Campo Fecha de Caducidad --}}
                     <div class="mb-4">
                         <x-label for="fecha_caducidad" value="{{ __('Fecha de Caducidad (Opcional)') }}" />
                         {{-- Es crucial usar el formato 'Y-m-d' para el campo date y el operador optional() es más limpio --}}
-                        <x-input id="fecha_caducidad" class="block mt-1 w-full" type="date" name="fecha_caducidad" 
-                            value="{{ old('fecha_caducidad', optional($product->fecha_caducidad)->format('Y-m-d')) }}" 
-                            @if($soloLectura) readonly @endif />
+                        <x-input id="fecha_caducidad" 
+                            class="block mt-1 w-full @if($soloLectura) bg-gray-100 text-gray-700 cursor-not-allowed @endif" 
+                            type="date" 
+                            name="fecha_caducidad"
+                            value="{{ old('fecha_caducidad', optional($product->fecha_caducidad)->format('Y-m-d')) }}"
+                            :readonly="$soloLectura" 
+ />
+
                     </div>
                     
                     <div class="flex justify-end mt-4">

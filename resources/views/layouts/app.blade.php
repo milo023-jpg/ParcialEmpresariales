@@ -24,7 +24,7 @@
             {{-- ⚠️ NOTA: El componente Livewire de notificaciones (@livewire('notifications-menu')) debe integrarse DENTRO de este componente navigation-menu para que aparezca en el header. --}}
             @livewire('navigation-menu')
 
-            <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <!-- <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                 @if(session('error'))
                     <div class="mb-4 rounded-md bg-red-50 p-4">
                         <div class="flex">
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 @endif
-            </div>
+            </div> -->
 
             @if (isset($header))
                 <header class="bg-white shadow">
