@@ -28,9 +28,10 @@ Route::middleware([
     })->name('dashboard');
 
     // Dashboard administrador
-    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
-        ->middleware('admin')
-        ->name('admin.dashboard');
+    Route::middleware(['auth', 'verified'])
+    ->get('/dashboard', [AdminDashboardController::class, 'index'])
+    ->name('dashboard');
+
 
     /*
     |--------------------------------------------------------------------------
